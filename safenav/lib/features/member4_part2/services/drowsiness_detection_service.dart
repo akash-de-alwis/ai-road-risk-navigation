@@ -31,6 +31,11 @@ class DrowsinessDetectionService extends ChangeNotifier {
   DateTime _lastFrameTime = DateTime.now();
   Timer? _metricsTimer;
 
+  CameraController? get cameraController => _cameraController;
+
+  bool get isCameraReady =>
+      _cameraController != null && _cameraController!.value.isInitialized;
+
   DrowsinessDetectionService({
     required this.preferences,
     required this.calibration,

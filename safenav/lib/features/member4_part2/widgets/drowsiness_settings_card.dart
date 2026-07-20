@@ -207,6 +207,42 @@ class _Body extends StatelessWidget {
 
               const Divider(height: 1, color: Color(0xFFEEF1F5)),
 
+              // ── Camera preview ─────────────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+                child: Row(
+                  children: [
+                    const Icon(Icons.camera_alt_outlined,
+                        size: 18, color: Color(0xFF5C6B7A)),
+                    const SizedBox(width: 10),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Show camera preview',
+                            style: TextStyle(
+                                fontSize: 13, color: Color(0xFF0D1B2A)),
+                          ),
+                          Text(
+                            'Replaces the monitoring chip with a live view',
+                            style: TextStyle(
+                                fontSize: 10.5, color: Color(0xFF5C6B7A)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Switch(
+                      value: prefs.showCameraPreview,
+                      activeThumbColor: const Color(0xFF2979FF),
+                      onChanged: (v) => prefs.setShowCameraPreview(v),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Divider(height: 1, color: Color(0xFFEEF1F5)),
+
               // ── Recalibrate ────────────────────────────────────────────────
               GestureDetector(
                 onTap: () async {

@@ -45,6 +45,7 @@ import '../../features/member4_part2/services/drowsiness_alert_service.dart';
 import '../../features/member4_part2/widgets/drowsiness_calibration_overlay.dart';
 import '../../features/member4_part2/widgets/drowsiness_alert_overlay.dart';
 import '../../features/member4_part2/widgets/drowsiness_status_chip.dart';
+import '../../features/member4_part2/widgets/drowsiness_camera_preview.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -1022,7 +1023,9 @@ class _MapScreenState extends State<MapScreen> {
                 return Positioned(
                   top: MediaQuery.of(context).padding.top + 90,
                   left: 16,
-                  child: const DrowsinessStatusChip(),
+                  child: drowsyPrefs.showCameraPreview
+                      ? const DrowsinessCameraPreview()
+                      : const DrowsinessStatusChip(),
                 );
               },
             ),
