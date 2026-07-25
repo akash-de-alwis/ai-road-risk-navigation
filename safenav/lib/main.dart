@@ -22,6 +22,7 @@ import './features/member4_part2/services/drowsiness_preference_service.dart';
 import './features/member4_part2/services/drowsiness_calibration_service.dart';
 import './features/member4_part2/services/drowsiness_alert_service.dart';
 import './features/member4_part2/services/drowsiness_detection_service.dart';
+import './features/member1b_realtime_pipeline/services/realtime_pipeline_service.dart';
 import './app.dart';
 
 void main() async {
@@ -52,6 +53,7 @@ class AppRoot extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => RealtimeRiskService()),
+        ChangeNotifierProvider(create: (_) => RealtimePipelineService()),
         ChangeNotifierProvider(create: (_) => EnhancedRouteService()),
         ChangeNotifierProvider(
           create: (_) {
