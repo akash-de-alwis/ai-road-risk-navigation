@@ -45,6 +45,7 @@ import '../../features/member4_part2/services/drowsiness_alert_service.dart';
 import '../../features/member4_part2/widgets/drowsiness_calibration_overlay.dart';
 import '../../features/member4_part2/widgets/drowsiness_alert_overlay.dart';
 import '../../features/member4_part2/widgets/drowsiness_status_chip.dart';
+import '../../features/member4_part2/widgets/drowsiness_camera_preview.dart';
 import '../../features/member1b_realtime_pipeline/services/realtime_pipeline_service.dart';
 import '../../features/member1b_realtime_pipeline/widgets/live_stream_indicator.dart';
 import '../../features/member1b_realtime_pipeline/widgets/stream_debug_panel.dart';
