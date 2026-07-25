@@ -45,7 +45,9 @@ import '../../features/member4_part2/services/drowsiness_alert_service.dart';
 import '../../features/member4_part2/widgets/drowsiness_calibration_overlay.dart';
 import '../../features/member4_part2/widgets/drowsiness_alert_overlay.dart';
 import '../../features/member4_part2/widgets/drowsiness_status_chip.dart';
-import '../../features/member4_part2/widgets/drowsiness_camera_preview.dart';
+import '../../features/member1b_realtime_pipeline/services/realtime_pipeline_service.dart';
+import '../../features/member1b_realtime_pipeline/widgets/live_stream_indicator.dart';
+import '../../features/member1b_realtime_pipeline/widgets/stream_debug_panel.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -99,6 +101,9 @@ class _MapScreenState extends State<MapScreen> {
   // ── Member 4 Part 2 — drowsiness calibration overlay state ───────────────
   bool _showCalibrationOverlay = false;
   int _calibrationSecondsLeft = 15;
+
+  // ── Member 1b — real-time pipeline debug panel toggle ────────────────────
+  bool _showStreamDebugPanel = false;
 
   List<Map<String, dynamic>> _activeAlerts = [];
   AlertService? _alertServiceRef;
@@ -371,6 +376,7 @@ class _MapScreenState extends State<MapScreen> {
       final sensorSvc = context.read<SensorService>();
       final alertSvc = context.read<AlertService>();
       final riskSvc = context.read<RealtimeRiskService>();
+      final pipelineSvc = context.read<RealtimePipelineService>();
       final enhSvc = context.read<EnhancedRouteService>();
       if (picked == null) {
         // User dismissed without navigating — clear any live preview
@@ -383,6 +389,12 @@ class _MapScreenState extends State<MapScreen> {
       await _pointAnnotationManager?.deleteAll();
       await _showTripMarkers();
       if (mounted) riskSvc.startMonitoring();
+      if (mounted) {
+        pipelineSvc.connect(
+          sensorSvc.currentTrip!.tripId,
+          vehicleType: context.read<VehiclePreferenceService>().currentVehicle,
+        );
+      }
       if (mounted) {
         context.read<ObstacleScanService>().scanRoute(
           picked.geometry.map((p) => [p[0], p[1]]).toList(),
@@ -823,6 +835,8 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _endTrip(BuildContext context) async {
     context.read<RealtimeRiskService>().stopMonitoring();
+    context.read<RealtimePipelineService>().disconnect();
+    setState(() => _showStreamDebugPanel = false);
     context.read<ObstacleAlertOrchestrator>().stopMonitoring();
     context.read<DrowsinessDetectionService>().stopDetection();
     context.read<ObstacleScanService>().clear();
@@ -1011,6 +1025,27 @@ class _MapScreenState extends State<MapScreen> {
                     child: const _ObstacleScanLoadingCard(),
                   );
                 },
+              ),
+
+            // ── 8c. Live stream indicator (member1b, active trip) ────────
+            if (!_isPickingLocation && sensorService.isTracking)
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 8,
+                right: 16,
+                child: LiveStreamIndicator(
+                  onLongPress: () => setState(
+                      () => _showStreamDebugPanel = !_showStreamDebugPanel),
+                ),
+              ),
+
+            // ── 8d. Stream debug panel (member1b, toggled via long-press) ─
+            if (!_isPickingLocation &&
+                sensorService.isTracking &&
+                _showStreamDebugPanel)
+              Positioned(
+                top: MediaQuery.of(context).padding.top + 44,
+                right: 0,
+                child: const StreamDebugPanel(),
               ),
 
             // ── 9a. Drowsiness monitoring chip (active trip) ─────────────
