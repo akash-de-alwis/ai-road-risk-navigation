@@ -8,17 +8,20 @@ class DrowsinessPreferenceService extends ChangeNotifier {
   static const _sensKey = 'drowsiness_sensitivity';
   static const _alertKey = 'drowsiness_alert_style';
   static const _baselineKey = 'drowsiness_baseline_json';
+  static const _cameraPreviewKey = 'drowsiness_camera_preview_enabled';
 
   bool detectionEnabled = false;
   String sensitivity = 'MEDIUM';
   String alertStyle = 'voice_visual';
   BaselineCalibration? baseline;
+  bool showCameraPreview = false;
 
   Future<void> loadFromStorage() async {
     final prefs = await SharedPreferences.getInstance();
     detectionEnabled = prefs.getBool(_enabledKey) ?? false;
     sensitivity = prefs.getString(_sensKey) ?? 'MEDIUM';
     alertStyle = prefs.getString(_alertKey) ?? 'voice_visual';
+    showCameraPreview = prefs.getBool(_cameraPreviewKey) ?? false;
     final baselineJson = prefs.getString(_baselineKey);
     if (baselineJson != null) {
       try {
@@ -65,6 +68,13 @@ class DrowsinessPreferenceService extends ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_baselineKey);
+  }
+
+  Future<void> setShowCameraPreview(bool v) async {
+    showCameraPreview = v;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_cameraPreviewKey, v);
+    notifyListeners();
   }
 
   // Sensitivity-adjusted thresholds
