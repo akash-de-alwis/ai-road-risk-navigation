@@ -22,6 +22,9 @@ import './features/member4_part2/services/drowsiness_preference_service.dart';
 import './features/member4_part2/services/drowsiness_calibration_service.dart';
 import './features/member4_part2/services/drowsiness_alert_service.dart';
 import './features/member4_part2/services/drowsiness_detection_service.dart';
+import './features/member5_vehicle_distance/services/distance_alert_service.dart';
+import './features/member5_vehicle_distance/services/distance_preference_service.dart';
+import './features/member5_vehicle_distance/services/vehicle_distance_service.dart';
 import './features/member1b_realtime_pipeline/services/realtime_pipeline_service.dart';
 import './app.dart';
 
@@ -124,6 +127,32 @@ class AppRoot extends StatelessWidget {
             alertService: ctx.read<DrowsinessAlertService>(),
           ),
           update: (_, prefs, calib, alert, prev) => prev!,
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
+            final p = DistancePreferenceService();
+            p.loadFromStorage();
+            return p;
+          },
+        ),
+        ChangeNotifierProxyProvider<DistancePreferenceService,
+            DistanceAlertService>(
+          create: (ctx) {
+            final a = DistanceAlertService(
+              preferences: ctx.read<DistancePreferenceService>(),
+            );
+            a.init();
+            return a;
+          },
+          update: (_, prefs, prev) => prev!,
+        ),
+        ChangeNotifierProxyProvider2<DistancePreferenceService,
+            DistanceAlertService, VehicleDistanceService>(
+          create: (ctx) => VehicleDistanceService(
+            preferences: ctx.read<DistancePreferenceService>(),
+            alertService: ctx.read<DistanceAlertService>(),
+          ),
+          update: (_, prefs, alert, prev) => prev!,
         ),
       ],
       child: const SafeNavApp(),

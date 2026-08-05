@@ -13,6 +13,7 @@ import '../../member1_risk_prediction/part2/services/vehicle_preference_service.
 import '../../member1_risk_prediction/part2/widgets/vehicle_selection_sheet.dart';
 import '../../member3_alert_system/part2/widgets/obstacle_settings_card.dart';
 import '../../features/member4_part2/widgets/drowsiness_settings_card.dart';
+import '../../features/member5_vehicle_distance/widgets/distance_settings_card.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -207,6 +208,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const ObstacleSettingsCard(),
 
                   const DrowsinessSettingsCard(),
+
+                  const DistanceSettingsCard(),
 
                   const SizedBox(height: 24),
                 ],

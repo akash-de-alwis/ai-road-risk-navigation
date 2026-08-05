@@ -22,6 +22,7 @@ from member2_route_engine.part2.router import router as m2p2_router
 from member3_alert_system.part2.router import router as m3p2_router
 from services.member4_part2.router import router as m4p2_router
 from services.member1b_realtime_pipeline.router import router as m1b_router
+from services.member5_vehicle_distance.router import router as m5_router
 
 app = FastAPI(
     title="SafeNav API",
@@ -41,6 +42,7 @@ app.include_router(m2p2_router)
 app.include_router(m3p2_router)
 app.include_router(m4p2_router)
 app.include_router(m1b_router)
+app.include_router(m5_router)
 
 
 # ── 1. Root ───────────────────────────────────────────────────────────────────
